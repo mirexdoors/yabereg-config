@@ -1,12 +1,14 @@
 <template>
 
   <div class="decorBlock__inputs">
-    <div class="decorBlock__inputItem decorInput" v-for="(item, index) in items" :key="item.ID">
+
+    <div class="decorBlock__inputItem decorInput" v-for="item in items" :key="item.ID">
       <input class="decorInput__radio" type="radio"
              :name="'name_' + item.PROPERTY_TYPE_ENUM_ID + '_' + item.IBLOCK_SECTION_ID"
              :id="item.ID"
+             :checked="checkedInputs === item.ID"
              :value="item.PROPERTY_PRICE_VALUE"
-             :checked="index === 0 ? 'checked' : ''"
+             @change="checkInput(item.IBLOCK_SECTION_ID, $event)"
       >
       <label class="decorInput__label" :for="item.ID">{{item.NAME}}</label>
     </div>
@@ -17,8 +19,15 @@
   export default {
     props: {
       items: Array,
+      checkedInputs: Object
     },
-    name: 'decorInputs'
+    name: 'decorInputs',
+    methods: {
+      checkInput(section, event) {
+        const { target } = event;
+        this.$store.commit('changeChecked', { id: section, checked: target.id });
+      }
+    }
   };
 </script>
 
@@ -48,6 +57,7 @@
     align-items: center;
     width: 100%;
     height: 100%;
+    text-align: center;
     border: 0.5px solid #ECECEC;
     background-color: #FAFAFA;
     cursor: pointer;
@@ -68,6 +78,11 @@
     .decorBlock__inputItem {
       margin-bottom: 8px;
       margin-right: 8px;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .decorBlock__inputItem {
+      margin-right: 0;
     }
   }
 </style>

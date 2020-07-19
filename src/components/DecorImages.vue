@@ -2,12 +2,12 @@
   <div class="decorBlock__imageBlock decorImage">
     <div class="decorImage__title">Цвет</div>
     <div class="decorImage__wrapper">
-      <div class="decorBlock__image" v-for="(item , index) in items" :key="item.ID">
+      <div class="decorBlock__image" v-for="item in items" :key="item.ID">
         <input class="decorImage__radio" type="radio"
                :name="'name_' + item.PROPERTY_TYPE_ENUM_ID + '_' + item.IBLOCK_SECTION_ID"
                :id="item.ID"
-               :checked="index
-         == 0 ? 'checked' : ''">
+               @change="checkInput(item.IBLOCK_SECTION_ID, $event)"
+              >
         <label class="decorImage__label" :for="item.ID">
           <div class="decorImage__color" v-if="item.PROPERTY_COLOR_VALUE"
                :style="'background-color:' + item.PROPERTY_COLOR_VALUE"></div>
@@ -25,7 +25,13 @@
     props: {
       items: Array,
     },
-    name: 'DecorImages'
+    name: 'DecorImages',
+    methods: {
+      checkInput(section, event) {
+        const { target } = event;
+        this.$store.commit('changeChecked', { id: section, checked: target.id });
+      }
+    }
   };
 </script>
 
@@ -42,11 +48,13 @@
 
   .decorImage__wrapper {
     display: flex;
+    flex-wrap: wrap;
   }
 
   .decorBlock__image {
     position: relative;
     margin-right: 8px;
+    margin-bottom: 5px;
     z-index: 0;
   }
 

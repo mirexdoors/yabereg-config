@@ -1,12 +1,13 @@
 <template>
-  <div class="decorBlock">
-    <div class="decorBlock__titleBlock titleBlock" @click="slideBlock">
+  <div class="decorBlock" :class="error===Number(section.ID) ? 'error' : ''">
+    <div class="decorBlock__titleBlock titleBlock"  @click="slideBlock">
       <div class="titleBlock__title"> {{section.NAME}}</div>
       <div class="titleBlock__line"></div>
     </div>
     <div class="slidedBlock  js-slide" ref="slidedBlock" v-if="section.elements">
       <DecorInputs v-if="(getFilteredElements(section.elements, 'Тип').length > 0)"
-                   :items="getFilteredElements(section.elements, 'Тип')"/>
+                   :items="getFilteredElements(section.elements, 'Тип')"
+                   :checkedInputs="checkedItems" />
       <DecorImages v-if="(getFilteredElements(section.elements, 'Цвет/Изображение').length > 0)"
                    :items="getFilteredElements(section.elements, 'Цвет/Изображение')"/>
       <DecorOptions v-if="getFilteredElements(section.elements, 'Опция').length > 0"
@@ -25,6 +26,7 @@
     props: {
       currentSetting: Number,
       section: Object,
+      error: Number
     },
     methods: {
       slideBlock() {
@@ -32,9 +34,14 @@
           this.$refs.slidedBlock.classList.toggle('hidden');
         }
       },
-      getFilteredElements: (elements, type) => elements.filter((element) =>
-        element.PROPERTY_TYPE_VALUE === type)
-      },
+      getFilteredElements: (elements, type) => elements.filter((element) => element.PROPERTY_TYPE_VALUE === type)
+    },
+    computed: {
+      checkedItems() {
+        return this.$store.state.Result.checkedInputs[this.section.ID];
+      }
+
+    },
     components: {
       DecorImages,
       DecorInputs,
@@ -85,6 +92,10 @@
     max-height: 0;
   }
 
+  .decorBlock.error {
+    border: 1px solid red;
+  }
+
   @media screen and (max-width: 768px) {
     .decorBlock {
       margin-right: 20px;
@@ -95,7 +106,7 @@
       max-height: 0;
     }
 
-    .slidedBlock.hidden {
+    .decorBlock:first-child .slidedBlock, .slidedBlock.hidden, .decorBlock.error .slidedBlock{
       max-height: 600px;
     }
 

@@ -32,7 +32,7 @@
     methods: {
       checkInput(section, event) {
         const { target } = event;
-        this.$store.commit('changeChecked', { id: section, checked: target.id });
+        this.$store.commit('changeChecked', { id: section, type: 'option', checked: target.id });
       }
     }
   };

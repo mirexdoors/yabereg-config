@@ -1,14 +1,15 @@
 <template>
   <div class="decorBlock" :class="error===Number(section.ID) ? 'error' : ''">
-    <div class="decorBlock__titleBlock titleBlock"  @click="slideBlock">
+    <div class="decorBlock__titleBlock titleBlock">
       <div class="titleBlock__title"> {{section.NAME}}</div>
       <div class="titleBlock__line"></div>
     </div>
     <div class="slidedBlock  js-slide" ref="slidedBlock" v-if="section.elements">
       <DecorInputs v-if="(getFilteredElements(section.elements, 'Тип').length > 0)"
                    :items="getFilteredElements(section.elements, 'Тип')"
-                   :checkedInputs="checkedItems" />
-      <DecorImages v-if="(getFilteredElements(section.elements, 'Цвет/Изображение').length > 0)"
+                   :checkedInputs="checkedItems"/>
+      <DecorImages v-if="(getFilteredElements(section.elements, 'Цвет/Изображение').length >
+       0 && getConditions(section))"
                    :items="getFilteredElements(section.elements, 'Цвет/Изображение')"/>
       <DecorOptions v-if="getFilteredElements(section.elements, 'Опция').length > 0"
                     :items="getFilteredElements(section.elements, 'Опция')"/>
@@ -29,12 +30,32 @@
       error: Number
     },
     methods: {
-      slideBlock() {
-        if (this.$refs.slidedBlock) {
-          this.$refs.slidedBlock.classList.toggle('hidden');
+      getFilteredElements: (elements, type) => elements.filter((element) => element.PROPERTY_TYPE_VALUE === type),
+      getConditions(section) {
+        // найдём элементы (изорбражения)  с условиями
+        const types = section.elements
+        .filter(element => element.PROPERTY_TYPE_VALUE === 'Тип' && element.PROPERTY_CONDITION_SHOW_IMAGES_VALUE === 'Y');
+
+        if (types.length > 0) {
+          /* если в "Типах" есть элемент с активным условием, то не показываем блок по дефолту.
+           ** показываем только если этот "тип" активен
+          * */
+          if (this.checkedItems) {
+            const typeIdsForActivate = types.map((item) => {
+              return item.ID;
+            });
+
+           const typeCheckedInputs = this.checkedItems.filter((input) => input.type === 'type');
+           if (typeCheckedInputs[0])
+            if (typeIdsForActivate.indexOf(typeCheckedInputs[0].id) !== -1) {
+              return true;
+            }
+            return false;
+          }
+        } else {
+          return true;
         }
-      },
-      getFilteredElements: (elements, type) => elements.filter((element) => element.PROPERTY_TYPE_VALUE === type)
+      }
     },
     computed: {
       checkedItems() {
@@ -88,10 +109,6 @@
     max-height: 300px;
   }
 
-  .slidedBlock.hidden {
-    max-height: 0;
-  }
-
   .decorBlock.error {
     border: 1px solid red;
   }
@@ -106,7 +123,7 @@
       max-height: 0;
     }
 
-    .decorBlock:first-child .slidedBlock, .slidedBlock.hidden, .decorBlock.error .slidedBlock{
+    .decorBlock .slidedBlock {
       max-height: 600px;
     }
 

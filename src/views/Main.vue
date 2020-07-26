@@ -68,16 +68,14 @@
         const checkedInputs = this.$store.state.Result.checkedInputs;
         //2. получаем все блоки
         const sections = this.settings[this.settingSteps[this.currentSetting]].sections;
-        const notChecked = sections.filter(section => {
-          return !checkedInputs.hasOwnProperty(section.ID);
-        });
+        const notChecked = sections.filter(section => !checkedInputs.hasOwnProperty(section.ID));
         if (notChecked.length > 0) {
-          //ставим error и переходим к элементу
           const firstId = notChecked[0].ID;
           this.error = Number(firstId);
           const component = this.$refs[firstId][0].$el;
-          console.log(component);
-          component.scrollIntoView({ behavior: 'smooth' });
+          const yOffset = -60;
+          const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
         } else {
 
           if (val === 'result') {
@@ -106,8 +104,9 @@
           const firstId = notChecked[0].ID;
           this.error = Number(firstId);
           const component = this.$refs[firstId][0].$el;
-          console.log(component);
-          component.scrollIntoView({ behavior: 'smooth' });
+          const yOffset = -60;
+          const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
         } else {
           this.error = 0;
           //сравниваем, если нет, то возвращаем к блоку

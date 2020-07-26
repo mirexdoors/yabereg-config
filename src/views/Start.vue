@@ -1,11 +1,10 @@
 <template>
   <div class="start_wrapper">
-    <StartChoose />
+    <StartChoose @moveToCalc="moveToCalc" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import StartChoose from '@/components/StartChoose.vue';
 
 export default {
@@ -13,6 +12,11 @@ export default {
   components: {
     StartChoose,
   },
+  methods: {
+    moveToCalc() {
+      this.$emit('moveToCalc');
+    }
+  }
 };
 </script>
 <style scoped>

@@ -19,13 +19,13 @@
   export default {
     props: {
       items: Array,
-      checkedInputs: Object
+      checkedInputs: String
     },
     name: 'decorInputs',
     methods: {
       checkInput(section, event) {
         const { target } = event;
-        this.$store.commit('changeChecked', { id: section, checked: target.id });
+        this.$store.commit('changeChecked', { id: section, type: 'type', checked: target.id });
       }
     }
   };

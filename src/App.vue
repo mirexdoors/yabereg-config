@@ -1,8 +1,30 @@
 <template>
   <div id="app">
-    <router-view/>
+    <Start v-if="!isCalc" @moveToCalc="moveToCalc"/>
+    <Main v-else/>
   </div>
 </template>
+
+<script>
+  import Start from './views/Start.vue';
+  import Main from './views/Main.vue';
+
+  export default {
+    name: 'Home',
+    data: () => ({
+      isCalc: false,
+    }),
+    methods: {
+      moveToCalc() {
+        this.isCalc = true;
+      }
+    },
+    components: {
+      Main,
+      Start,
+    },
+  };
+</script>
 
 <style>
   @font-face {
@@ -20,9 +42,10 @@
     font-weight: bold;
     font-style: normal;
   }
+
   @font-face {
     font-family: 'Glyphicons Halflings';
-    font-display:swap;
+    font-display: swap;
     src: url('./assets/fonts/glyphicons-halflings-regular.eot');
     src: url('./assets/fonts/glyphicons-halflings-regular.eot?#iefix') format("embedded-opentype"),
     url('./assets/fonts/glyphicons-halflings-regular.woff2') format("woff2"),
@@ -31,21 +54,24 @@
     url('./assets/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format("svg")
   }
 
-  #app  * {
+  #app * {
     font-family: 'Gotham Pro', sans-serif;
     box-sizing: border-box;
   }
+
   #app {
 
     height: 100%;
     margin: 0 auto;
   }
+
   ul {
     margin-block-start: 0;
     margin-block-end: 0;
     padding-inline-start: 0;
     list-style-type: none;
   }
+
   button {
     padding: 0;
     border: none;
@@ -54,18 +80,22 @@
     background-color: transparent;
     cursor: pointer;
   }
+
   input {
     outline: none;
   }
+
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
+
   input[type=number] {
     text-align: center;
     -moz-appearance: textfield;
   }
+
   .optionItem {
     position: relative;
     z-index: 0;
@@ -105,6 +135,7 @@
     width: 100%;
     height: 100%;
   }
+
   .btn {
     display: flex;
     justify-content: center;
@@ -113,18 +144,21 @@
     font-size: 1rem;
     font-weight: bold;
     color: #343434;
-    outline: none!important;
+    outline: none !important;
     background-color: #e1bd0c;
-    transition: background-color 0.5s,color 0.5s,border .5s;
-    box-shadow: 5px 10px 30px -1px rgba(0,0,0,0.4);
+    transition: background-color 0.5s, color 0.5s, border .5s;
+    box-shadow: 5px 10px 30px -1px rgba(0, 0, 0, 0.4);
   }
+
   .btn:hover {
-    background-color:  #f0d400;
+    background-color: #f0d400;
   }
+
   .btn span.text {
     position: relative;
     padding: 0 45px 0 30px;
   }
+
   .btn span.text:before {
     content: "\e080";
     position: absolute;
@@ -141,6 +175,7 @@
     -webkit-transition: right 1s;
     transition: right 1s;
   }
+
   .btn:hover span.text:before {
     right: 15px;
   }

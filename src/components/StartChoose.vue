@@ -5,7 +5,7 @@
       <div class="chooseBlock__inputs">
         <div class="chooseBlock__item"
              v-for="(amount, index) in
-               roomAmoutVariants"
+               roomVariants"
              :key="amount.value"
         >
           <input
@@ -13,11 +13,12 @@
             type="radio"
             class="chooseBlock__inputRadio"
             :id="`rooms${index}`"
+            :value="amount.value"
             name="rooms">
           <label :class="setSmallFontSize(amount.isSmall)"
                  class="chooseBlock__btn chooseBlock__label"
                  :for="`rooms${index}`">
-            {{amount.value}}
+            {{amount.text}}
           </label>
         </div>
       </div>
@@ -27,12 +28,13 @@
       <div class="chooseBlock__inputs ">
         <div class="chooseBlock__item"
              v-for="(amount, index) in
-               wcAmountVariants"
+               wcVariants"
              :key="amount.value"
         >
           <input
             v-model="wcAmount"
             type="radio"
+            :value="amount.value"
             class="chooseBlock__inputRadio"
             :id="`wc${index}`"
             name="wc">
@@ -44,21 +46,40 @@
         </div>
       </div>
     </div>
-    <div class="start__block chooseBlock">
-      <div class="chooseBlock__text">Введите метраж</div>
+    <div class="start__block chooseBlock chooseBlock--wide" :class="isErrorFootage ?
+    'chooseBlock--error' : ''">
+      <div class="chooseBlock__text">Введите метраж квартиры</div>
       <div class="chooseBlock__inputs">
         <input class="chooseBlock__btn chooseBlock__btn--input chooseBlock__item" type="number"
-               min="0">
+               min="0" v-model="footage" @input="isErrorFootage = false">
       </div>
     </div>
-    <div class="start__block chooseBlock">
-      <div class="chooseBlock__text">Балкон/лоджия</div>
+    <div class="start__block chooseBlock chooseBlock--wide" :class="isErrorBalcony ?
+    'chooseBlock--error' : ''">
+      <div class="chooseBlock__text">Выберите балкон</div>
       <div class="chooseBlock__inputs">
-        <input class="chooseBlock__btn chooseBlock__btn--input chooseBlock__item" type="number"
-               min="0">
+        <div class="chooseBlock__item"
+             v-for="(amount, index) in
+               balconyVariants"
+             :key="amount.value"
+        >
+          <input
+            v-model="balcony"
+            type="radio"
+            :value="amount.value"
+            class="chooseBlock__inputRadio"
+            :id="`balcony${index}`"
+            @change="isErrorBalcony = false"
+            name="balcony">
+          <label
+            class="chooseBlock__btn chooseBlock__btn--wide chooseBlock__btn--smallText chooseBlock__label"
+            :for="`balcony${index}`">
+            {{amount.text}}
+          </label>
+        </div>
       </div>
     </div>
-    <router-link to="/calc" class="submitBtn btn"><span class="text">Продолжить</span></router-link>
+    <button class="submitBtn btn" @click="moveToCalc"><span class="text">Продолжить</span></button>
   </div>
 </template>
 
@@ -66,24 +87,49 @@
   export default {
     name: 'StartChoose',
     data: () => ({
-      roomAmout: null,
-      wcAmount: null,
-      roomAmoutVariants: [
+      isErrorFootage: null,
+      isErrorBalcony: null,
+      roomAmout: 1,
+      footage: null,
+      wcAmount: 1,
+      balcony: null,
+      balconyVariants: [
         {
-          value: 'Студия',
-          isSmall: true
+          text: 'Балкон/лоджия',
+          value: 1,
         },
+        {
+          text: 'Тёплая лоджия',
+          value: 0,
+        },
+      ],
+      roomVariants: [
+        {
+          value: 0,
+          isSmall: true,
+          text: 'Студия'
+        },
+        { value: 1, text: 1},
+        { value: 2, text: 2},
+        { value: 3, text: 3},
+        { value: 4, text: 4},
+      ],
+      wcVariants: [
         { value: 1, },
         { value: 2, },
         { value: 3, },
-        { value: 4, },
-      ],
-      wcAmountVariants: [
-        { value: 1, },
-        { value: 2, },
       ],
     }),
     methods: {
+      moveToCalc() {
+        if (this.footage > 0 && this.balcony) {
+          this.$emit('moveToCalc');
+        }
+        if (this.footage < 1)  this.isErrorFootage = true;
+
+        if (!this.balcony) this.isErrorBalcony = true;
+
+      },
       setSmallFontSize(bool) {
         return bool ? 'chooseBlock__btn--smallText' : '';
       }
@@ -91,7 +137,6 @@
   };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .start {
     display: flex;
@@ -109,8 +154,14 @@
     flex-direction: column;
     align-items: center;
     margin-bottom: 25px;
-  }
 
+  }
+  .chooseBlock.chooseBlock--wide {
+    padding: 15px;
+  }
+  .chooseBlock.chooseBlock--error {
+    border: 1px solid red;
+  }
   .chooseBlock__text {
     font-size: 1.5rem;
     color: #414551;
@@ -143,6 +194,10 @@
     border: 1px solid #A2A5B5;
   }
 
+  .chooseBlock__btn.chooseBlock__btn--wide {
+    width: 100px;
+  }
+
   .chooseBlock__inputRadio {
     position: absolute;
     top: 0;
@@ -172,6 +227,7 @@
       padding: 50px;
     }
   }
+
   @media all and (max-width: 1024px) {
     .start {
       padding: 40px 70px;
@@ -203,6 +259,7 @@
     .chooseBlock {
       margin-bottom: 15px;
     }
+
     .chooseBlock__text {
       padding-bottom: 10px;
     }
@@ -212,6 +269,7 @@
     .start {
       width: 320px;
     }
+
     .submitBtn {
       width: 250px;
     }

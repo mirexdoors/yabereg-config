@@ -29,7 +29,7 @@
     methods: {
       checkInput(section, event) {
         const { target } = event;
-        this.$store.commit('changeChecked', { id: section, checked: target.id });
+        this.$store.commit('changeChecked', { id: section, type: 'image', checked: target.id });
       }
     }
   };

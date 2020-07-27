@@ -38,13 +38,17 @@
     },
     computed: {
       settings() {
-        return this.$store.getters.allSettings;
+        const allSettings = this.$store.getters.allSettings;
+        if (!this.$store.getters.isBalcony) delete allSettings['1032'];
+        return allSettings;
       },
       settingSteps() {
         const result = {};
         let i = 0;
-        if (this.$store.getters.allSettings) {
-          for (const setting in this.$store.getters.allSettings) {
+        const allSettings = this.$store.getters.allSettings;
+        if (allSettings) {
+          if (!this.$store.getters.isBalcony) delete allSettings['1032'];
+          for (const setting in allSettings) {
             result[i] = setting;
             i++;
           }
@@ -53,9 +57,11 @@
       },
       images() {
         const images = {};
-        if (this.$store.getters.allSettings) {
+        const allSettings = this.$store.getters.allSettings;
+        if (allSettings) {
+          if (!this.$store.getters.isBalcony) delete allSettings['1032'];
           for (const index in this.$store.getters.allSettings) {
-            images[this.$store.getters.allSettings[index].ID] = this.$store.getters.allSettings[index].PICTURE;
+            images[allSettings[index].ID] = allSettings[index].PICTURE;
           }
         }
         return images;
@@ -68,22 +74,24 @@
         const checkedInputs = this.$store.state.Result.checkedInputs;
         //2. получаем все блоки
         const sections = this.settings[this.settingSteps[this.currentSetting]].sections;
-        const notChecked = sections.filter(section => !checkedInputs.hasOwnProperty(section.ID));
+        const notChecked = sections.filter((section) => !checkedInputs.hasOwnProperty(section.ID));
         if (notChecked.length > 0) {
           const firstId = notChecked[0].ID;
           this.error = Number(firstId);
           const component = this.$refs[firstId][0].$el;
           const yOffset = -60;
           const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: 'smooth' });
+          window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+          });
         } else {
-
           if (val === 'result') {
             this.isResult = true;
           } else {
             this.isResult = false;
             for (const index in this.settingSteps) {
-              if (val == this.settingSteps[index]) {
+              if (val === this.settingSteps[index]) {
                 this.currentSetting = index;
               }
             }
@@ -106,14 +114,19 @@
           const component = this.$refs[firstId][0].$el;
           const yOffset = -60;
           const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: 'smooth' });
+          window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+          });
         } else {
           this.error = 0;
           //сравниваем, если нет, то возвращаем к блоку
           const nextIndex = Number(this.currentSetting) + 1;
+
           if (Object.prototype.hasOwnProperty.call(this.settingSteps, nextIndex)) {
             this.currentSetting++;
-          } else if (nextIndex == 3) {
+          } else if ((!this.$store.getters.isBalcony && nextIndex === 2)
+          || (this.$store.getters.isBalcony && nextIndex === 3)) {
             this.isResult = true;
           }
         }

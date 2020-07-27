@@ -1,11 +1,14 @@
 <template>
   <div class="decorBlock__imageBlock decorImage">
-    <div class="decorImage__title">Цвет</div>
+    <div class="decorImage__title">Цвет
+      <span v-if="!inactive" class="inactiveTitle">(выбор цвета для этого варианта
+        недоступен)</span></div>
     <div class="decorImage__wrapper">
       <div class="decorBlock__image" v-for="item in items" :key="item.ID">
         <input class="decorImage__radio" type="radio"
                :name="'name_' + item.PROPERTY_TYPE_ENUM_ID + '_' + item.IBLOCK_SECTION_ID"
                :id="item.ID"
+               :disabled="!inactive"
                @change="checkInput(item.IBLOCK_SECTION_ID, $event)"
               >
         <label class="decorImage__label" :for="item.ID">
@@ -24,6 +27,7 @@
   export default {
     props: {
       items: Array,
+      inactive: Boolean,
     },
     name: 'DecorImages',
     methods: {
@@ -37,7 +41,7 @@
 
 <style scoped>
   .decorBlock__imageBlock {
-    padding: 10px 0 20px 0;
+    padding: 10px 0 5px 0;
   }
 
   .decorImage__title {
@@ -70,7 +74,15 @@
     height: 50px;
     cursor: pointer;
   }
-
+  /**/
+  .inactiveTitle {
+    font-style: italic;
+    color: rgba(255, 13, 15, 0.55);
+  }
+  .decorImage__radio:disabled + .decorImage__label {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
   .decorImage__radio:checked + .decorImage__label {
     border: 2px solid #E1BD0C;
   }

@@ -1,9 +1,13 @@
 const Result = {
   state: {
     total: 0,
+    isBalcony: false,
     checkedInputs: {},
   },
   mutations: {
+    changeBalcony(state, payload) {
+      state.isBalcony = payload;
+    },
     changeTotal(state, payload) {
       const newTotal = Number(state.total) + Number(payload);
       state.total = newTotal;
@@ -25,9 +29,9 @@ const Result = {
       }
       state.checkedInputs = { ...state.checkedInputs, [payload.id]: checkedItems};
     }
-
   },
   getters: {
+    isBalcony: (state) => state.isBalcony,
     total: (state) => state.total,
     checkedInputs: (state) => state.checkedInputs,
   }

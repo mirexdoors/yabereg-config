@@ -5,14 +5,19 @@
       <div class="titleBlock__line"></div>
     </div>
     <div class="slidedBlock  js-slide" ref="slidedBlock" v-if="section.elements">
-      <DecorInputs v-if="(getFilteredElements(section.elements, 'Тип').length > 0)"
-                   :items="getFilteredElements(section.elements, 'Тип')"
-                   :checkedInputs="checkedItems"/>
-      <DecorImages v-if="(getFilteredElements(section.elements, 'Цвет/Изображение').length >
-       0 && getConditions(section))"
-                   :items="getFilteredElements(section.elements, 'Цвет/Изображение')"/>
-      <DecorOptions v-if="getFilteredElements(section.elements, 'Опция').length > 0"
-                    :items="getFilteredElements(section.elements, 'Опция')"/>
+      <DecorInputs
+        v-if="(getFilteredElements(section.elements, 'Тип').length > 0)"
+        :items="getFilteredElements(section.elements, 'Тип')"
+        :checkedInputs="checkedItems"
+      />
+      <DecorImages
+        :inactive="getConditions(section)"
+        v-if="(getFilteredElements(section.elements, 'Цвет/Изображение').length > 0)"
+        :items="getFilteredElements(section.elements, 'Цвет/Изображение')"
+      />
+      <DecorOptions
+        v-if="getFilteredElements(section.elements, 'Опция').length > 0"
+        :items="getFilteredElements(section.elements, 'Опция')"/>
     </div>
   </div>
 </template>
@@ -73,7 +78,7 @@
 
 <style scoped>
   .decorBlock {
-    padding: 0 50px 0 25px;
+    padding: 0 50px 10px 25px;
     margin: 20px 0 20px 20px;
     background: #FFFFFF;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -85,7 +90,7 @@
     align-items: center;
     width: 100%;
     padding-top: 25px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     cursor: pointer;
   }
 

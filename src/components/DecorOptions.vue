@@ -42,7 +42,7 @@
   .decorBlock__optionsBlock {
     display: flex;
     flex-wrap: wrap;
-    padding: 0 0 20px 0;
+    padding: 10px 0 5px 0;
   }
 
   .optionItem__label {

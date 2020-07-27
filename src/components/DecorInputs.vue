@@ -1,12 +1,11 @@
 <template>
 
   <div class="decorBlock__inputs">
-
     <div class="decorBlock__inputItem decorInput" v-for="item in items" :key="item.ID">
       <input class="decorInput__radio" type="radio"
              :name="'name_' + item.PROPERTY_TYPE_ENUM_ID + '_' + item.IBLOCK_SECTION_ID"
              :id="item.ID"
-             :checked="checkedInputs === item.ID"
+             :checked="isChecked(item.ID)"
              :value="item.PROPERTY_PRICE_VALUE"
              @change="checkInput(item.IBLOCK_SECTION_ID, $event)"
       >
@@ -19,10 +18,18 @@
   export default {
     props: {
       items: Array,
-      checkedInputs: String
+      checkedInputs: Array
     },
     name: 'decorInputs',
     methods: {
+      isChecked(id) {
+        if (this.checkedInputs) {
+          return this.checkedInputs.some((checkedInput) => {
+            return checkedInput.id === id;
+          });
+        }
+        return false;
+      },
       checkInput(section, event) {
         const { target } = event;
         this.$store.commit('changeChecked', { id: section, type: 'type', checked: target.id });
@@ -35,7 +42,7 @@
   .decorBlock__inputs {
     display: flex;
     width: 100%;
-    padding: 0 0 10px 0;
+    padding: 10px 0 3px 0;
   }
 
   .decorBlock__inputItem {

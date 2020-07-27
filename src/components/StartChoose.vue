@@ -69,7 +69,7 @@
             :value="amount.value"
             class="chooseBlock__inputRadio"
             :id="`balcony${index}`"
-            @change="isErrorBalcony = false"
+            @change="changeBalcony"
             name="balcony">
           <label
             class="chooseBlock__btn chooseBlock__btn--wide chooseBlock__btn--smallText chooseBlock__label"
@@ -92,15 +92,15 @@
       roomAmout: 1,
       footage: null,
       wcAmount: 1,
-      balcony: null,
+      balcony: undefined,
       balconyVariants: [
         {
           text: 'Балкон/лоджия',
-          value: 1,
+          value: true,
         },
         {
           text: 'Тёплая лоджия',
-          value: 0,
+          value: false,
         },
       ],
       roomVariants: [
@@ -121,13 +121,17 @@
       ],
     }),
     methods: {
+      changeBalcony() {
+        this.isErrorBalcony = false;
+        this.$store.commit('changeBalcony', this.balcony);
+      },
       moveToCalc() {
-        if (this.footage > 0 && this.balcony) {
+        if (this.footage > 0 && this.balcony !== undefined) {
           this.$emit('moveToCalc');
         }
-        if (this.footage < 1)  this.isErrorFootage = true;
+        if (this.footage < 1) this.isErrorFootage = true;
 
-        if (!this.balcony) this.isErrorBalcony = true;
+        if (this.balcony === undefined) this.isErrorBalcony = true;
 
       },
       setSmallFontSize(bool) {

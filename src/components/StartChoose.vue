@@ -109,10 +109,22 @@
           isSmall: true,
           text: 'Студия'
         },
-        { value: 1, text: 1},
-        { value: 2, text: 2},
-        { value: 3, text: 3},
-        { value: 4, text: 4},
+        {
+          value: 1,
+          text: 1
+        },
+        {
+          value: 2,
+          text: 2
+        },
+        {
+          value: 3,
+          text: 3
+        },
+        {
+          value: 4,
+          text: 4
+        },
       ],
       wcVariants: [
         { value: 1, },
@@ -123,16 +135,22 @@
     methods: {
       changeBalcony() {
         this.isErrorBalcony = false;
-        this.$store.commit('changeBalcony', this.balcony);
       },
       moveToCalc() {
-        if (this.footage > 0 && this.balcony !== undefined) {
-          this.$emit('moveToCalc');
-        }
         if (this.footage < 1) this.isErrorFootage = true;
-
         if (this.balcony === undefined) this.isErrorBalcony = true;
 
+        if (this.footage > 0 && this.balcony !== undefined) {
+          const data = {
+            rooms: this.roomAmout,
+            wc: this.wcAmount,
+            footage: this.footage,
+            isBalcony: this.balcony
+          };
+
+          this.$store.commit('setStartData', data);
+          this.$emit('moveToCalc');
+        }
       },
       setSmallFontSize(bool) {
         return bool ? 'chooseBlock__btn--smallText' : '';
@@ -160,12 +178,15 @@
     margin-bottom: 25px;
 
   }
+
   .chooseBlock.chooseBlock--wide {
     padding: 15px;
   }
+
   .chooseBlock.chooseBlock--error {
     border: 1px solid red;
   }
+
   .chooseBlock__text {
     font-size: 1.5rem;
     color: #414551;

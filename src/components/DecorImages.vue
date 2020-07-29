@@ -1,20 +1,20 @@
 <template>
   <div class="decorBlock__imageBlock decorImage">
     <div class="decorImage__title">Цвет
-      <span v-if="!inactive" class="inactiveTitle">(выбор цвета для этого варианта
-        недоступен)</span></div>
+    </div>
     <div class="decorImage__wrapper">
       <div class="decorBlock__image" v-for="item in items" :key="item.ID">
         <input class="decorImage__radio" type="radio"
                :name="'name_' + item.PROPERTY_TYPE_ENUM_ID + '_' + item.IBLOCK_SECTION_ID"
                :id="item.ID"
-               :disabled="!inactive"
+               :disabled="checkActive(item.PROPERTY_TYPE_LINK_VALUE, item)"
+               :checked="isChecked(item.ID)"
                @change="checkInput(item.IBLOCK_SECTION_ID, $event)"
-              >
+        >
         <label class="decorImage__label" :for="item.ID">
-          <div class="decorImage__color" v-if="item.PROPERTY_COLOR_VALUE"
-               :style="'background-color:' + item.PROPERTY_COLOR_VALUE"></div>
-          <img v-else-if="item.PROPERTY_IMAGE_VALUE" :src="item.PROPERTY_IMAGE_VALUE"
+          <div class="decorImage__color" v-if="item.COLOR"
+               :style="'background-color:' + item.COLOR"></div>
+          <img v-else-if="item.IMAGE" :src="item.IMAGE"
                :alt="item.NAME"
                class="decorImage__img"></label>
 
@@ -25,15 +25,56 @@
 
 <script>
   export default {
+    name: 'DecorImages',
     props: {
       items: Array,
-      inactive: Boolean,
+      checkedInputs: Array,
     },
-    name: 'DecorImages',
+    data: () => ({
+      uniqueItems: [],
+    }),
+    mounted() {
+      //выберем и скроем дубли
+      this.uniqueItems = this.items.filter((item, index, self) => self.findIndex(t =>
+      t.PROPERTY_IMAGE_COLOR_VALUE === item.PROPERTY_IMAGE_COLOR_VALUE) === index);
+    },
     methods: {
+      checkActive(typeLink, element) {
+        if (this.checkedInputs) {
+         if (element.IBLOCK_SECTION_ID != 1042) {
+           if (this.checkedInputs.some(item => item.type === 'type')) {
+             return !this.checkedInputs.some(item => item.type === 'type' && item.id == typeLink)
+           } else {
+             return  false;
+           }
+         } else {
+           if (this.checkedInputs.some(item => item.type === 'option')) {
+             return !this.checkedInputs.some(item => item.type === 'option' && item.id == typeLink)
+           } else {
+             return  true;
+           }
+         }
+        } else {
+          if (element.PROPERTY_TYPE_LINK_VALUE)
+          return true;
+          else return false
+        }
+      },
+      isChecked(id) {
+        if (this.checkedInputs) {
+          return this.checkedInputs.some((checkedInput) => {
+            return checkedInput.id === id;
+          });
+        }
+        return false;
+      },
       checkInput(section, event) {
         const { target } = event;
-        this.$store.commit('changeChecked', { id: section, type: 'image', checked: target.id });
+        this.$store.commit('changeChecked', {
+          id: section,
+          type: 'image',
+          checked: target.id
+        });
       }
     }
   };
@@ -53,6 +94,7 @@
   .decorImage__wrapper {
     display: flex;
     flex-wrap: wrap;
+    padding-left: 2px;
   }
 
   .decorBlock__image {
@@ -70,21 +112,26 @@
 
   .decorImage__label {
     display: block;
+    max-width: 50px;
+    max-height: 50px;
     width: 50px;
     height: 50px;
     cursor: pointer;
   }
+
   /**/
   .inactiveTitle {
     font-style: italic;
     color: rgba(255, 13, 15, 0.55);
   }
+
   .decorImage__radio:disabled + .decorImage__label {
     opacity: 0.25;
     cursor: not-allowed;
   }
+
   .decorImage__radio:checked + .decorImage__label {
-    border: 2px solid #E1BD0C;
+    box-shadow: 0 0 0 2px #E1BD0C;
   }
 
   .decorImage__img {
@@ -92,7 +139,7 @@
   }
 
   .decorImage__color {
-    width: 46px;
-    height: 46px;
+    width: 100%;
+    height: 100%;
   }
 </style>

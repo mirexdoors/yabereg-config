@@ -18,13 +18,10 @@ const Settings = {
     }
   },
   getters: {
-    allSettings: state => {
-      return state.settingsData.main_sections;
-    },
-    options: state => {
-      return state.settingsData.options;
-    }
-  },
+    wcData: state =>  state.settingsData.wc_data,
+    allSettings: state =>  state.settingsData.main_sections,
+    options: state =>  state.settingsData.options,
+},
 };
 
 export default Settings;

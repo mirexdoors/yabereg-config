@@ -5,6 +5,7 @@
              class="optionItem__checkbox"
              :name="'name_' + item.PROPERTY_TYPE_ENUM_ID + '_' + item.IBLOCK_SECTION_ID"
              :id="item.ID"
+             :checked="isChecked(item.ID)"
              @change="checkInput(item.IBLOCK_SECTION_ID, $event)"
       >
       <label class="optionItem__label optionLabel" :for="item.ID">
@@ -30,6 +31,14 @@
     },
     name: 'DecorOptions',
     methods: {
+      isChecked(id) {
+        if (this.checkedInputs) {
+          return this.checkedInputs.some((checkedInput) => {
+            return checkedInput.id === id;
+          });
+        }
+        return false;
+      },
       checkInput(section, event) {
         const { target } = event;
         this.$store.commit('changeChecked', { id: section, type: 'option', checked: target.id });

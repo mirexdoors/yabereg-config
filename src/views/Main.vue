@@ -6,7 +6,7 @@
     </div>
 
     <div class="mainWrapper__col mainData">
-      <Navigation @setStepById="setStepById" :settings="settings"
+      <Navigation @setStepById="setStepById" ref="nav" :settings="settings"
                   :isResult="isResult"
                   :currentSetting="settingSteps[currentSetting]"/>
       <div v-if="!isResult">
@@ -75,11 +75,22 @@
         //2. получаем все блоки
         const sections = this.settings[this.settingSteps[this.currentSetting]].sections;
         const notChecked = sections.filter((section) => !checkedInputs.hasOwnProperty(section.ID));
+
+        //проверка на заполнение плинтус/без плинтуса
+        if (this.settingSteps[this.currentSetting] == 1031) {
+          if (checkedInputs[1034]) {
+            const ceilingOption = checkedInputs[1034].filter(item => item.type == 'option');
+            if (ceilingOption.length < 1) {
+              notChecked.unshift({ID: 1034})
+            }
+          }
+        }
+
         if (notChecked.length > 0) {
           const firstId = notChecked[0].ID;
           this.error = Number(firstId);
           const component = this.$refs[firstId][0].$el;
-          const yOffset = -60;
+          const yOffset = -100;
           const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({
             top: y,
@@ -96,6 +107,14 @@
               }
             }
           }
+
+          const component = this.$refs.nav.$el;
+          const yOffset = -100;
+          const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+          });
         }
       },
       setNextStep() {
@@ -107,12 +126,23 @@
         const notChecked = sections.filter(section => {
           return !checkedInputs.hasOwnProperty(section.ID);
         });
+
+        //проверка на заполнение плинтус/без плинтуса
+        if (this.settingSteps[this.currentSetting] == 1031) {
+          if (checkedInputs[1034]) {
+           const ceilingOption = checkedInputs[1034].filter(item => item.type == 'option');
+           if (ceilingOption.length < 1) {
+             notChecked.unshift({ID: 1034})
+           }
+          }
+        }
+
         if (notChecked.length > 0) {
           //ставим error и переходим к элементу
           const firstId = notChecked[0].ID;
           this.error = Number(firstId);
           const component = this.$refs[firstId][0].$el;
-          const yOffset = -60;
+          const yOffset = -100;
           const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({
             top: y,
@@ -128,7 +158,17 @@
           } else if ((!this.$store.getters.isBalcony && nextIndex === 2)
           || (this.$store.getters.isBalcony && nextIndex === 3)) {
             this.isResult = true;
+          } else {
+            this.isResult = true;
           }
+
+          const component = this.$refs.nav.$el;
+          const yOffset = -100;
+          const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+          });
         }
       }
     },

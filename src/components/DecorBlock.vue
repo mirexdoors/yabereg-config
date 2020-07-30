@@ -15,6 +15,11 @@
         :items="getFilteredElements(section.elements, 'Цвет/Изображение')"
         :checkedInputs="checkedItems"
       />
+      <DecorCheckboxes
+        v-if="getFilteredElements(section.elements, 'Чекбокс').length > 0"
+        :items="getFilteredElements(section.elements, 'Чекбокс')"
+        :checkedInputs="checkedItems"
+      />
       <DecorOptions
         v-if="getFilteredElements(section.elements, 'Опция').length > 0"
         :items="getFilteredElements(section.elements, 'Опция')"
@@ -28,6 +33,7 @@
   import DecorInputs from './DecorInputs.vue';
   import DecorImages from './DecorImages.vue';
   import DecorOptions from './DecorOptions.vue';
+  import DecorCheckboxes from './DecorCheckboxes.vue';
 
   export default {
     name: 'DecorBlock',
@@ -51,7 +57,8 @@
     components: {
       DecorImages,
       DecorInputs,
-      DecorOptions
+      DecorOptions,
+      DecorCheckboxes
     },
   };
 </script>

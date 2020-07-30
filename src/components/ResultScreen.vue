@@ -89,7 +89,7 @@
 
             const element = allSections[sectionID].elements.filter(element => element.ID ===
             checkedItem.id)[0];
-console.log(checkedItem)
+
             // получаем цены за единицу
             const priceWork = element.PRICE_WORK ? Number(element.PRICE_WORK) : 0;
             const priceMaterial = element.PRICE_MATERIAL ? Number(element.PRICE_MATERIAL) : 0;
@@ -151,7 +151,6 @@ console.log(checkedItem)
         });
       }
       // расчёт общей стоимости
-      console.log(checked)
       for (const sectionID in checked) {
           checked[sectionID].forEach(item => {
             if (item.id != 0) {

@@ -64,6 +64,7 @@
 
   @media screen and (max-width: 767px){
     .decorBlock__optionItem {
+      width: 100%;
       padding: 10px 0;
     }
     .optionItem__label {

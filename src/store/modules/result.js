@@ -19,14 +19,28 @@ const Result = {
 
       let checkedItems = state.checkedInputs[payload.id];
 
-      const isExistType = checkedItems.some((item)=> item.type === payload.type);
+      const isExistType = checkedItems.some((item)=> item.type === payload.type && item.type!=='checkbox');
 
-      if (!isExistType)
-      checkedItems.push({ id: payload.checked, type: payload.type });
-      else {
-        checkedItems = checkedItems.map(item => {
-          if (item.type === payload.type) item.id = payload.checked;
-          return item;
+      const isExistCheckboxValue = checkedItems.some((item)=> item.type === 'checkbox' && item.id === payload.checked);
+
+      if (!isExistCheckboxValue) {
+        if (!isExistType)
+          checkedItems.push({
+            id: payload.checked,
+            type: payload.type
+          });
+        else {
+          checkedItems = checkedItems.map(item => {
+            if (item.type === payload.type) item.id = payload.checked;
+            return item;
+          });
+        }
+      } else  {
+
+        checkedItems.forEach((item, index) => {
+          if (item.id === payload.checked) {
+            delete checkedItems[index]
+          }
         });
       }
       state.checkedInputs = { ...state.checkedInputs, [payload.id]: checkedItems};

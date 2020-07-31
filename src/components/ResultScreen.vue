@@ -99,54 +99,76 @@
             //получаем стоимость исходя из раздела
             if (allSections[sectionID].IBLOCK_SECTION_ID == 1031) {  //комната
               if (checkedItem.id != 12696) {
-                checkedItem.price = priceWork * footage + priceMaterial * footage;
+                checkedItem.price_work = priceWork * footage;
+                checkedItem.price_material = priceMaterial * footage;
+                checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
               } else {
-                checkedItem.price = priceWork * wcSquare;
+                checkedItem.price_work = priceWork * wcSquare;
+                checkedItem.price_material = 0;
+                checkedItem.price =  checkedItem.price_work;
               }
               //стены/плинтус/полы
               if (sectionID == 1035 || sectionID == 1036 || sectionID == 1037) {
-                checkedItem.price = (priceWork + priceMaterial) * (footage - wcSquare);
+                checkedItem.price_work = priceWork  * (footage - wcSquare);
+                checkedItem.price_material = priceMaterial * (footage - wcSquare);
+                checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
               }
 
               //двери/розетки
               if (sectionID == 1038 || sectionID == 1040) {
                 if (checkedItem.id != 13425) {
-                  checkedItem.price = (priceWork + priceMaterial) * (rooms + wc);
+                  checkedItem.price_work  = priceWork * (rooms + wc);
+                  checkedItem.price_material = priceMaterial * (rooms + wc);
+                  checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
                 } else {
-                  checkedItem.price = (priceMaterial + priceWork) * (4 * rooms + wcSockets);
+                  checkedItem.price_material = (priceMaterial) * (4 * rooms + wcSockets);
+                  checkedItem.price_work = (priceWork) * (4 * rooms + wcSockets);
+                  checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
                 } //розетки
               }
               //освещение
               if (sectionID == 1039) {
                 if (checkedItem.id == 13038) {
-                  checkedItem.price = (priceMaterial + priceWork) * (6 * rooms + wcSpots);
+                  checkedItem.price_work = (priceWork) * (6 * rooms + wcSpots);
+                  checkedItem.price_material = (priceMaterial) * (6 * rooms + wcSpots);
+                  checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
                 } else {
-                  checkedItem.price = (priceWork + priceMaterial) * (rooms + wc);
+                  checkedItem.price_work = (priceWork) * (rooms + wc);
+                  checkedItem.price_material = (priceMaterial) * (rooms + wc);
+                  checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
                 }
               }
 
             } else if (allSections[sectionID].IBLOCK_SECTION_ID == 1032) { //балкон
               checkedItem.price = (priceWork + priceMaterial) * 4;
             } else if (allSections[sectionID].IBLOCK_SECTION_ID == 1033) {  //санузел
-              checkedItem.price = (priceWork + priceMaterial) * wcSquare;
-
+              checkedItem.price_work = (priceWork) * wcSquare;
+              checkedItem.price_material = (priceMaterial) * wcSquare;
+              checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
               //ванны
               if (sectionID == 1044 || sectionID == 1061) {
-                checkedItem.price =
-                (priceWork + priceMaterial) * wcBathsAmount;
+                checkedItem.price_work =  (priceWork) * wcBathsAmount;
+                checkedItem.price_material =  (priceMaterial) * wcBathsAmount;
+                checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
               }
               //полотенцесушитель
               if (sectionID == 1047) {
-                checkedItem.price = (priceWork + priceMaterial) * wcTilesAmount;
+                checkedItem.price_work = (priceWork + priceMaterial) * wcTilesAmount;
+                checkedItem.price_material = (priceWork + priceMaterial) * wcTilesAmount;
+                checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
               }
               //унитаз
               if (sectionID == 1048) {
-                checkedItem.price = (priceWork + priceMaterial) * wcBowlsAmount;
+                checkedItem.price_work = (priceWork) * wcBowlsAmount;
+                checkedItem.price_material = (priceMaterial) * wcBowlsAmount;
+                checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
               }
 
               //раковина и проч
               if (sectionID == 1046 || sectionID == 1060 || sectionID == 1045) {
-                checkedItem.price = (priceWork + priceMaterial) * wcWashesAmount;
+                checkedItem.price_work = (priceWork) * wcWashesAmount;
+                checkedItem.price_material = (priceMaterial) * wcWashesAmount;
+                checkedItem.price =  checkedItem.price_work +  checkedItem.price_material;
               }
             }
           }

@@ -36,7 +36,8 @@
           60 рабочих дней
         </div>
       </div>
-      <a data-target="feedback-call" class="result__button btn" aria-haspopup="true"
+      <a data-target="feedback-call" @click="processData" class="result__button btn"
+         aria-haspopup="true"
          aria-expanded="false" href="#feedback-call">
         <span class="text">Оставить заявку</span>
       </a>
@@ -55,6 +56,7 @@
       };
     },
     mounted() {
+      window.calculator = {};
       this.options = this.$store.getters.options;
       // расчёт
       let total = 0;
@@ -166,6 +168,11 @@
       },
     },
     methods: {
+      processData() {
+        window.calculator.total = this.total;
+        window.calculator.state = this.$store.getters.state;
+
+      },
       changeCost(event) {
         const input = event.target;
         const val = input.value;

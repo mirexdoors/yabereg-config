@@ -88,6 +88,16 @@
           }
         }
 
+        //проверка на заполнение опции у плитки
+        if (this.settingSteps[this.currentSetting] == 1033) {
+          if (checkedInputs[1042]) {
+            const ceilingOption = checkedInputs[1042].filter(item => item.type == 'option');
+            if (ceilingOption.length < 1) {
+              notChecked.unshift({ ID: 1042 });
+            }
+          }
+        }
+
         if (Object.keys(checkedInputs).length != 0) {
           let isColorSelected = false;
           const elementsWithColors = [];
@@ -103,12 +113,16 @@
               if (elements.length > 0) {
                 elements.forEach(element => {
                   if (checkedInputs.hasOwnProperty(element.IBLOCK_SECTION_ID)) {
-                    isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
-                    .some(item => (item.type == 'type' && element.PROPERTY_TYPE_LINK_VALUE !=
-                    item.id) || item.type == 'image');
-                    console.log(isColorSelected)
-                    if (!isColorSelected && notChecked[0].ID != element.IBLOCK_SECTION_ID) {
-
+                    if (element.IBLOCK_SECTION_ID != 1042) {
+                      isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
+                      .some(item => (item.type == 'type' && element.PROPERTY_TYPE_LINK_VALUE !=
+                      item.id) || item.type == 'image');
+                    } else {
+                      isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
+                      .some(item => (item.type == 'option' && element.PROPERTY_TYPE_LINK_VALUE !=
+                      item.id) || item.type == 'image');
+                    }
+                    if (!isColorSelected) {
                       notChecked.unshift({ ID: element.IBLOCK_SECTION_ID });
                     }
                   }
@@ -129,60 +143,25 @@
             behavior: 'smooth'
           });
         } else {
-          let isColorSelected = false;
-          const elementsWithColors = [];
-          //првоеряем, есть ли привязанные цвета для выбранных инпутов
-          sections.forEach(section => {
-            elementsWithColors.push(section.elements.filter(element => {
-              return element.PROPERTY_TYPE_LINK_VALUE != null;
-            }));
-          });
 
-          if (elementsWithColors.length > 0) {
-            elementsWithColors.forEach(elements => {
-              if (elements.length > 0) {
-                elements.forEach(element => {
-                  isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
-                  .some(item => (item.type == 'type' && element.PROPERTY_TYPE_LINK_VALUE != item.id)
-                  || (item.type == 'image'));
-                  if (!isColorSelected) {
-                    const firstId = element.IBLOCK_SECTION_ID;
-                    this.error = Number(firstId);
-                    const component = this.$refs[firstId][0].$el;
-                    const yOffset = -100;
-                    const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                    window.scrollTo({
-                      top: y,
-                      behavior: 'smooth'
-                    });
-                  }
-                });
-              }
-            });
+          if (val === 'result') {
+            this.isResult = true;
           } else {
-            isColorSelected = true;
-          }
-
-          if (isColorSelected) {
-            if (val === 'result') {
-              this.isResult = true;
-            } else {
-              this.isResult = false;
-              for (const index in this.settingSteps) {
-                if (val === this.settingSteps[index]) {
-                  this.currentSetting = index;
-                }
+            this.isResult = false;
+            for (const index in this.settingSteps) {
+              if (val === this.settingSteps[index]) {
+                this.currentSetting = index;
               }
             }
-
-            const component = this.$refs.nav.$el;
-            const yOffset = -100;
-            const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({
-              top: y,
-              behavior: 'smooth'
-            });
           }
+
+          const component = this.$refs.nav.$el;
+          const yOffset = -100;
+          const y = component.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+          });
         }
       },
       setNextStep() {
@@ -199,8 +178,18 @@
         if (this.settingSteps[this.currentSetting] == 1031) {
           if (checkedInputs[1034]) {
             const ceilingOption = checkedInputs[1034].filter(item => item.type == 'option');
-            if (ceilingOption.length < 1 && notChecked[0].ID !=1034) {
+            if (ceilingOption.length < 1) {
               notChecked.unshift({ ID: 1034 });
+            }
+          }
+        }
+
+        //проверка на заполнение опции у плитки
+        if (this.settingSteps[this.currentSetting] == 1033) {
+          if (checkedInputs[1042]) {
+            const ceilingOption = checkedInputs[1042].filter(item => item.type == 'option');
+            if (ceilingOption.length < 1) {
+              notChecked.unshift({ ID: 1042 });
             }
           }
         }
@@ -220,12 +209,17 @@
               if (elements.length > 0) {
                 elements.forEach(element => {
                   if (checkedInputs.hasOwnProperty(element.IBLOCK_SECTION_ID)) {
-                    isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
-                    .some(item => (item.type == 'type' && element.PROPERTY_TYPE_LINK_VALUE !=
-                    item.id) || item.type == 'image');
-console.log(isColorSelected)
-                    if (!isColorSelected && notChecked[0].ID != element.IBLOCK_SECTION_ID) {
+                    if (element.IBLOCK_SECTION_ID != 1042) {
+                      isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
+                      .some(item => (item.type == 'type' && element.PROPERTY_TYPE_LINK_VALUE !=
+                      item.id) || item.type == 'image');
+                    } else {
+                      isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
+                      .some(item => (item.type == 'option' && element.PROPERTY_TYPE_LINK_VALUE !=
+                      item.id) || item.type == 'image');
+                    }
 
+                    if (!isColorSelected) {
                       notChecked.unshift({ ID: element.IBLOCK_SECTION_ID });
                     }
                   }

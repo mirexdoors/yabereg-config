@@ -4,9 +4,9 @@
       <ul class="result__options">
         <li class="result__optionItem optionItem" v-for="option in options" :key="option.ID">
           <div class="result__option optionItem">
-            <input type="checkbox" @change="changeCost" :value="option.PRICE"
+            <input type="checkbox" @change="changeCost($event)" :value="option.PRICE"
                    class="optionItem__checkbox"
-                   name="check"
+                   name="check" :checked="isChecked('optionCheck' + option.ID)"
                    :id="'optionCheck' + option.ID ">
             <label class="optionItem__label optionLabel" :for="'optionCheck' + option.ID">
               <div class="optionLabel__field">
@@ -193,7 +193,6 @@
       processData() {
         window.calculator.total = this.total;
         window.calculator.state = this.$store.getters.state;
-
       },
       changeCost(event) {
         const input = event.target;
@@ -203,11 +202,20 @@
         } else {
           this.total += -1 * Number(val);
         }
+        this.$store.commit('changeChecked', { id: 0, type: 'checkbox', checked: input.id });
       },
       numberWithSpaces(x) {
         return x.toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-      }
+      },
+      isChecked(id) {
+        if (this.checkedInputs) {
+          return this.checkedInputs.some((checkedInput) => {
+            return checkedInput.id === id;
+          });
+        }
+        return false;
+      },
     }
   };
 </script>

@@ -38,6 +38,7 @@
       this.uniqueItems = this.items.filter((item, index, self) => self.findIndex(t =>
       t.PROPERTY_IMAGE_COLOR_VALUE === item.PROPERTY_IMAGE_COLOR_VALUE) === index);
 
+      //кастомизация названия блока
       const sectionId = this.items[0].IBLOCK_SECTION_ID;
       if (sectionId == 1039 || sectionId == 1047 || sectionId == 1045 || sectionId == 1048  ||
       sectionId == 1060 || sectionId == 1061) {

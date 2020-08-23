@@ -51,6 +51,7 @@ const Result = {
     isBalcony: (state) => state.isBalcony,
     total: (state) => state.total,
     checkedInputs: (state) => state.checkedInputs,
+    options: (state) => state.options,
   }
 };
 

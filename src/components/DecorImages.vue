@@ -1,7 +1,6 @@
 <template>
   <div class="decorBlock__imageBlock decorImage">
-    <div class="decorImage__title">Цвет
-    </div>
+    <div class="decorImage__title">{{blockName}}</div>
     <div class="decorImage__wrapper">
       <div class="decorBlock__image" v-for="item in items" :key="item.ID">
         <input class="decorImage__radio" type="radio"
@@ -32,31 +31,46 @@
     },
     data: () => ({
       uniqueItems: [],
+      blockName: 'Цвет'
     }),
     mounted() {
       //выберем и скроем дубли
       this.uniqueItems = this.items.filter((item, index, self) => self.findIndex(t =>
       t.PROPERTY_IMAGE_COLOR_VALUE === item.PROPERTY_IMAGE_COLOR_VALUE) === index);
+
+      const sectionId = this.items[0].IBLOCK_SECTION_ID;
+      if (sectionId == 1039 || sectionId == 1047 || sectionId == 1045 || sectionId == 1048  ||
+      sectionId == 1060 || sectionId == 1061) {
+        this.blockName = '';
+      }
     },
     methods: {
       checkActive(typeLink, element) {
         if (this.checkedInputs) {
-         if (element.IBLOCK_SECTION_ID != 1042) {
+
+         if (element.IBLOCK_SECTION_ID != 1042 && element.IBLOCK_SECTION_ID != 1044) {
            if (this.checkedInputs.some(item => item.type === 'type')) {
              return !this.checkedInputs.some(item => item.type === 'type' && item.id == typeLink)
            } else {
              return  false;
            }
+         } else if (element.IBLOCK_SECTION_ID == 1044) {
+
+           if (this.checkedInputs.some(item => item.type === 'type')) {
+             return !this.checkedInputs.some(item => item.type === 'type' && item.id == typeLink)
+           } else {
+             return  true;
+           }
          } else {
            if (this.checkedInputs.some(item => item.type === 'option')) {
-             return !this.checkedInputs.some(item => item.type === 'option' && item.id == typeLink)
+             return !this.checkedInputs.some(item =>(item.type ===
+             'option' &&  item.id == typeLink))
            } else {
              return  true;
            }
          }
         } else {
-          if (element.PROPERTY_TYPE_LINK_VALUE)
-          return true;
+          if (element.PROPERTY_TYPE_LINK_VALUE) return true;
           else return false
         }
       },
@@ -136,6 +150,7 @@
 
   .decorImage__img {
     width: 100%;
+    height: 50px;
   }
 
   .decorImage__color {

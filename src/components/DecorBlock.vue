@@ -10,8 +10,10 @@
         :items="getFilteredElements(section.elements, 'Тип')"
         :checkedInputs="checkedItems"
       />
+
       <DecorImages
-        v-if="(getFilteredElements(section.elements, 'Цвет/Изображение').length > 0)"
+        v-if="(getFilteredElements(section.elements, 'Цвет/Изображение').length > 0 &&
+        section.ID != 1042)"
         :items="getFilteredElements(section.elements, 'Цвет/Изображение')"
         :checkedInputs="checkedItems"
       />
@@ -23,6 +25,12 @@
       <DecorOptions
         v-if="getFilteredElements(section.elements, 'Опция').length > 0"
         :items="getFilteredElements(section.elements, 'Опция')"
+        :checkedInputs="checkedItems"
+      />
+      <DecorImages
+        v-if="(getFilteredElements(section.elements, 'Цвет/Изображение').length > 0 &&
+        section.ID == 1042)"
+        :items="getFilteredElements(section.elements, 'Цвет/Изображение')"
         :checkedInputs="checkedItems"
       />
     </div>
@@ -98,7 +106,7 @@
     overflow: hidden;
     transition: max-height .7s ease-in-out;
     height: auto;
-    max-height: 300px;
+    max-height: 400px;
   }
 
   .decorBlock.error {

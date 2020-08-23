@@ -87,13 +87,19 @@
             }
           }
         }
-
         //проверка на заполнение опции у плитки
         if (this.settingSteps[this.currentSetting] == 1033) {
           if (checkedInputs[1042]) {
             const ceilingOption = checkedInputs[1042].filter(item => item.type == 'option');
             if (ceilingOption.length < 1) {
               notChecked.unshift({ ID: 1042 });
+            }
+          }
+
+          if (checkedInputs[1044]) {
+            const ceilingOption = checkedInputs[1044].filter(item => item.type == 'option');
+            if (ceilingOption.length < 1) {
+              notChecked.unshift({ ID: 1044 });
             }
           }
         }
@@ -113,7 +119,7 @@
               if (elements.length > 0) {
                 elements.forEach(element => {
                   if (checkedInputs.hasOwnProperty(element.IBLOCK_SECTION_ID)) {
-                    if (element.IBLOCK_SECTION_ID != 1042) {
+                    if (element.IBLOCK_SECTION_ID != 1042  && element.IBLOCK_SECTION_ID != 1044) {
                       isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
                       .some(item => (item.type == 'type' && element.PROPERTY_TYPE_LINK_VALUE !=
                       item.id) || item.type == 'image');
@@ -192,9 +198,17 @@
               notChecked.unshift({ ID: 1042 });
             }
           }
+
+          if (checkedInputs[1044]) {
+            const ceilingOption = checkedInputs[1044].filter(item => item.type == 'option');
+            if (ceilingOption.length < 1) {
+              notChecked.unshift({ ID: 1044 });
+            }
+          }
         }
 
         if (Object.keys(checkedInputs).length != 0) {
+
           let isColorSelected = false;
           const elementsWithColors = [];
           //првоеряем, есть ли привязанные цвета для выбранных инпутов
@@ -227,6 +241,8 @@
               }
             });
           }
+
+
         }
 
         if (notChecked.length > 0) {

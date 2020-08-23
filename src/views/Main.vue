@@ -289,7 +289,6 @@
       ResultScreen
     },
   };
-
 </script>
 <style scoped>
 

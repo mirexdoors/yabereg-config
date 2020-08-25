@@ -22,8 +22,8 @@
   export default {
     name: 'Navigation',
     props: {
-      currentSetting: Number,
-      settings: Array,
+      currentSetting: String,
+      settings: Object,
       isResult: Boolean
     },
     methods: {

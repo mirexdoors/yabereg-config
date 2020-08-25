@@ -1,5 +1,6 @@
 <template>
-  <div class="decorBlock" :class="error===Number(section.ID) ? 'error' : ''">
+  <div class="decorBlock" v-if="isCheckBath" :class="error===Number(section.ID) ?
+  'error' : ''">
     <div class="decorBlock__titleBlock titleBlock">
       <div class="titleBlock__title"> {{section.NAME}}</div>
       <div class="titleBlock__line"></div>
@@ -57,10 +58,15 @@
       getFilteredElements: (elements, type) => elements.filter((element) => element.PROPERTY_TYPE_VALUE === type),
     },
     computed: {
+      isCheckBath() {
+        if (this.$store.state.Result.checkedInputs[1044] && this.section.ID == 1061 ) {
+          return !this.$store.state.Result.checkedInputs[1044].some(item=> item.id == 14097)
+        }
+        return true;
+      },
       checkedItems() {
         return this.$store.state.Result.checkedInputs[this.section.ID];
       }
-
     },
     components: {
       DecorImages,

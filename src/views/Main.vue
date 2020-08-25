@@ -11,7 +11,8 @@
                   :currentSetting="settingSteps[currentSetting]"/>
       <div v-if="!isResult">
         <DecorBlock v-for="section in settings[settingSteps[currentSetting]].sections"
-                    :key="section.ID" :error="error" :section="section" :ref="section.ID"/>
+                    :key="section.ID" :error="error" :section="section" :ref="section.ID"
+        />
 
         <NextSubmit @nextStep="setNextStep"/>
 
@@ -38,6 +39,9 @@
       this.$store.dispatch('getSettings');
     },
     computed: {
+      checkedItems() {
+        return this.$store.state.Result.checkedInputs;
+      },
       settings() {
         const allSettings = this.$store.getters.allSettings;
         if (!this.$store.getters.isBalcony) delete allSettings['1032'];
@@ -77,6 +81,15 @@
         const sections = this.settings[this.settingSteps[this.currentSetting]].sections;
         const notChecked = sections.filter((section) => section.ID != 1040 &&
         !checkedInputs.hasOwnProperty(section.ID));
+
+// проверка валидации "смесителей ванны" при заполненной опции "без ванны"
+        if (this.checkedItems[1044] && notChecked.some(section => section.ID == 1061)) {
+          if (this.checkedItems[1044].some(item => item.id == 14097)) {
+            notChecked.forEach((section, index) => {
+              if (section.ID == 1061) notChecked.splice(index, 1);
+            });
+          }
+        }
 
         //проверка на заполнение плинтус/без плинтуса
         if (this.settingSteps[this.currentSetting] == 1031) {
@@ -119,10 +132,17 @@
               if (elements.length > 0) {
                 elements.forEach(element => {
                   if (checkedInputs.hasOwnProperty(element.IBLOCK_SECTION_ID)) {
-                    if (element.IBLOCK_SECTION_ID != 1042  && element.IBLOCK_SECTION_ID != 1044) {
-                      isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
-                      .some(item => (item.type == 'type' && element.PROPERTY_TYPE_LINK_VALUE !=
-                      item.id) || item.type == 'image');
+                    if (element.IBLOCK_SECTION_ID != 1042) {
+                      const filteredImages = checkedInputs[element.IBLOCK_SECTION_ID].filter(input => {
+                        return element.PROPERTY_TYPE_VALUE == 'Цвет/Изображение';
+                      });
+                      if (filteredImages.length > 1) {
+                        isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
+                        .some(item => (item.type == 'type' && element.PROPERTY_TYPE_LINK_VALUE !=
+                        item.id) || item.type == 'image');
+                      } else {
+                        isColorSelected = true;
+                      }
                     } else {
                       isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
                       .some(item => (item.type == 'option' && element.PROPERTY_TYPE_LINK_VALUE !=
@@ -180,6 +200,14 @@
           return section.ID != 1040 && !checkedInputs.hasOwnProperty(section.ID);
         });
 
+// проверка валидации "смесителей ванны" при заполненной опции "без ванны"
+        if (this.checkedItems[1044] && notChecked.some(section => section.ID == 1061)) {
+          if (this.checkedItems[1044].some(item => item.id == 14097)) {
+            notChecked.forEach((section, index) => {
+              if (section.ID == 1061) notChecked.splice(index, 1);
+            });
+          }
+        }
         //проверка на заполнение плинтус/без плинтуса
         if (this.settingSteps[this.currentSetting] == 1031) {
           if (checkedInputs[1034]) {
@@ -224,9 +252,16 @@
                 elements.forEach(element => {
                   if (checkedInputs.hasOwnProperty(element.IBLOCK_SECTION_ID)) {
                     if (element.IBLOCK_SECTION_ID != 1042) {
-                      isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
-                      .some(item => (item.type == 'type' && element.PROPERTY_TYPE_LINK_VALUE !=
-                      item.id) || item.type == 'image');
+                      const filteredImages = checkedInputs[element.IBLOCK_SECTION_ID].filter(input => {
+                        return element.PROPERTY_TYPE_VALUE == 'Цвет/Изображение';
+                      });
+                      if (filteredImages.length > 1) {
+                        isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
+                        .some(item => (item.type == 'type' && element.PROPERTY_TYPE_LINK_VALUE !=
+                        item.id) || item.type == 'image');
+                      } else {
+                        isColorSelected = true;
+                      }
                     } else {
                       isColorSelected = checkedInputs[element.IBLOCK_SECTION_ID]
                       .some(item => (item.type == 'option' && element.PROPERTY_TYPE_LINK_VALUE !=
@@ -241,12 +276,9 @@
               }
             });
           }
-
-
         }
 
         if (notChecked.length > 0) {
-
           //ставим error и переходим к элементу
           const firstId = notChecked[0].ID;
           this.error = Number(firstId);
@@ -291,7 +323,6 @@
   };
 </script>
 <style scoped>
-
   .mainWrapper * {
     font-family: 'Gotham Pro', sans-serif;
   }

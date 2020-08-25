@@ -57,7 +57,7 @@
     },
     mounted() {
       window.calculator = {};
-      this.options = this.$store.getters.options;
+      this.options = this.$store.getters.additionalOptions;
       // расчёт
       let total = 0;
       const mainSections = this.$store.getters.allSettings;
@@ -77,6 +77,7 @@
       const wcSockets = Number(wcData[wc].PROPERTY_SOCKETS_VALUE);
       const wcSpots = Number(wcData[wc].PROPERTY_SPOTS_VALUE);
       const wcSquare = Number(wcData[wc].PROPERTY_SQUARE_VALUE);
+
       //сведём все секции в один объект
       for (const roomId in mainSections) {
         mainSections[roomId].sections

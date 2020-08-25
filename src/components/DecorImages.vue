@@ -40,7 +40,7 @@
 
       //кастомизация названия блока
       const sectionId = this.items[0].IBLOCK_SECTION_ID;
-      if (sectionId == 1039 || sectionId == 1047 || sectionId == 1045 || sectionId == 1048  ||
+      if (sectionId == 1039 || sectionId == 1047 || sectionId == 1045 || sectionId == 1048 ||
       sectionId == 1060 || sectionId == 1061) {
         this.blockName = '';
       }
@@ -49,34 +49,44 @@
       checkActive(typeLink, element) {
         if (this.checkedInputs) {
 
-         if (element.IBLOCK_SECTION_ID != 1042 && element.IBLOCK_SECTION_ID != 1044) {
-           if (this.checkedInputs.some(item => item.type === 'type')) {
-             return !this.checkedInputs.some(item => item.type === 'type' && item.id == typeLink)
-           } else {
-             return  false;
-           }
-         } else if (element.IBLOCK_SECTION_ID == 1044) {
-
-           if (this.checkedInputs.some(item => item.type === 'type')) {
-             return !this.checkedInputs.some(item => item.type === 'type' && item.id == typeLink)
-           } else {
-             return  true;
-           }
-         } else {
-           if (this.checkedInputs.some(item => item.type === 'option')) {
-             return !this.checkedInputs.some(item =>(item.type ===
-             'option' &&  item.id == typeLink))
-           } else {
-             return  true;
-           }
-         }
+          if (element.IBLOCK_SECTION_ID != 1042 && element.IBLOCK_SECTION_ID != 1044) {
+            console.log(typeLink)
+            if (typeLink != null)
+              return !this.checkedInputs.some(item => item.id == typeLink);
+            else return  false;
+          } else if (element.IBLOCK_SECTION_ID == 1044) {
+            if (this.checkedInputs.some(item => item.type === 'type')) {
+              return !this.checkedInputs.some(item => item.type === 'type' && item.id == typeLink);
+            } else {
+              return true;
+            }
+          } else {
+            if (this.checkedInputs.some(item => item.type === 'option')) {
+              return !this.checkedInputs.some(item => (item.type ===
+              'option' && item.id == typeLink));
+            } else {
+              return true;
+            }
+          }
         } else {
-          if (element.PROPERTY_TYPE_LINK_VALUE) return true;
-          else return false
+          if (element.PROPERTY_TYPE_LINK_VALUE) {
+            return true;
+          } else {
+            return false;
+          }
         }
       },
       isChecked(id) {
         if (this.checkedInputs) {
+          //проверка на выбранный тип
+          const filteredItems = this.items.filter(item => {
+            return this.checkedInputs.some(input => input.type == 'type' && input.id ==
+            item.PROPERTY_TYPE_LINK_VALUE);
+          });
+
+          if (filteredItems.length == 1) {
+            return filteredItems[0].ID == id ? true : false;
+          }
           return this.checkedInputs.some((checkedInput) => {
             return checkedInput.id === id;
           });

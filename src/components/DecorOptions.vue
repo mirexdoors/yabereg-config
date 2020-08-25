@@ -28,6 +28,7 @@
   export default {
     props: {
       items: Array,
+      checkedInputs: Array,
     },
     name: 'DecorOptions',
     methods: {

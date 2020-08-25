@@ -9,8 +9,8 @@
   export default {
     name: 'LeftImage',
     props: {
-      img: String,
-      currentSetting: Number
+      img: Object,
+      currentSetting: String
     },
   };
 </script>

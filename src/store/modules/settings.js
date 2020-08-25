@@ -20,7 +20,7 @@ const Settings = {
   getters: {
     wcData: state =>  state.settingsData.wc_data,
     allSettings: state =>  state.settingsData.main_sections,
-    options: state =>  state.settingsData.options,
+    additionalOptions: state =>  state.settingsData.options,
 },
 };
 

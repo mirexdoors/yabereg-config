@@ -36,9 +36,13 @@
           60 рабочих дней
         </div>
       </div>
-      <a data-target="feedback-call" @click="processData" class="result__button btn"
+      <a data-target="#feedback_question_adv"
+         data-toggle="modal"
+         @click="processData"
+         class="result__button btn"
          aria-haspopup="true"
-         aria-expanded="false" href="#feedback-call">
+         aria-expanded="false"
+         href="javascript:;">
         <span class="text">Оставить заявку</span>
       </a>
     </div>

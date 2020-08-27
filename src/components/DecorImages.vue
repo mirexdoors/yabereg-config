@@ -50,7 +50,6 @@
         if (this.checkedInputs) {
 
           if (element.IBLOCK_SECTION_ID != 1042 && element.IBLOCK_SECTION_ID != 1044) {
-            console.log(typeLink)
             if (typeLink != null)
               return !this.checkedInputs.some(item => item.id == typeLink);
             else return  false;

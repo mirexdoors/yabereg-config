@@ -23,6 +23,30 @@
         </div>
       </div>
     </div>
+    <div class="start__block chooseBlock chooseBlock--wide" :class="isErrorWcType ?
+     'chooseBlock--error' : ''">
+      <div class="chooseBlock__text">Санузел</div>
+      <div class="chooseBlock__inputs">
+        <div class="chooseBlock__item"
+             v-for="(type, index) in
+               wcTypes"
+             :key="type.value"
+        >
+          <input
+            v-model="wcType"
+            type="radio"
+            class="chooseBlock__inputRadio"
+            :id="`wcType${index}`"
+            :value="type.value"
+            name="wcTypes">
+          <label
+                 class="chooseBlock__btn chooseBlock__label chooseBlock__btn--wide chooseBlock__btn--smallText"
+                 :for="`wcType${index}`">
+            {{type.name}}
+          </label>
+        </div>
+      </div>
+    </div>
     <div class="start__block  chooseBlock">
       <div class="chooseBlock__text">Выберите количество санузлов</div>
       <div class="chooseBlock__inputs ">
@@ -89,9 +113,11 @@
     data: () => ({
       isErrorFootage: null,
       isErrorBalcony: null,
+      isErrorWcType: null,
       roomAmout: 1,
       footage: null,
       wcAmount: 1,
+      wcType: null,
       balcony: undefined,
       balconyVariants: [
         {
@@ -126,6 +152,10 @@
           text: 4
         },
       ],
+      wcTypes: [
+        {value: 1, name: 'Совмещенный'},
+        {value: 2, name: 'Раздельный'},
+      ],
       wcVariants: [
         { value: 1, },
         { value: 2, },
@@ -137,6 +167,7 @@
         this.isErrorBalcony = false;
       },
       moveToCalc() {
+        if (this.wcType < 1) this.isErrorWcType = true;
         if (this.footage < 1) this.isErrorFootage = true;
         if (this.balcony === undefined) this.isErrorBalcony = true;
 
@@ -144,8 +175,9 @@
           const data = {
             rooms: this.roomAmout,
             wc: this.wcAmount,
+            wcType: this.wcType,
             footage: this.footage,
-            isBalcony: this.balcony
+            isBalcony: this.balcony,
           };
 
           this.$store.commit('setStartData', data);

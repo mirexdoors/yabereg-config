@@ -5,13 +5,16 @@ const Result = {
     checkedInputs: {},
     rooms: 1,
     wc: 1,
+    wcType: null,
     footage: 0,
   },
   mutations: {
     setStartData(state, payload) {
+      console.log(payload)
       state.isBalcony = payload.isBalcony;
       state.rooms = payload.rooms === 0 ? 1 : payload.rooms;
       state.wc = payload.wc;
+      state.wcType = payload.wcType;
       state.footage = payload.footage;
     },
     changeChecked(state, payload) {
@@ -52,6 +55,7 @@ const Result = {
     total: (state) => state.total,
     checkedInputs: (state) => state.checkedInputs,
     options: (state) => state.options,
+    wcType: (state) =>state.wcType,
   }
 };
 

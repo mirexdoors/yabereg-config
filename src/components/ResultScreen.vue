@@ -73,14 +73,16 @@
       const wc = state.wc;
       const checked = state.checkedInputs;
       const footage = this.footage = state.footage;
+      const wcType = state.wcType;
 
       const wcBowlsAmount = Number(wcData[wc].PROPERTY_TOILET_VALUE);
       const wcTilesAmount = Number(wcData[wc].PROPERTY_TOWEL_RAIL_VALUE);
       const wcWashesAmount = Number(wcData[wc].PROPERTY_WASHBASIN_VALUE);
       const wcBathsAmount = Number(wcData[wc].PROPERTY_BATHS_VALUE);
       const wcSockets = Number(wcData[wc].PROPERTY_SOCKETS_VALUE);
-      const wcSpots = Number(wcData[wc].PROPERTY_SPOTS_VALUE);
-      const wcSquare = Number(wcData[wc].PROPERTY_SQUARE_VALUE);
+      const wcSpots = (wcType==1 && wc==1) ? 6: Number(wcData[wc].PROPERTY_SPOTS_VALUE);
+      const wcSquare = (wcType==1 && wc==1) ? 8 :Number(wcData[wc].PROPERTY_SQUARE_VALUE);
+
 
       //сведём все секции в один объект
       for (const roomId in mainSections) {

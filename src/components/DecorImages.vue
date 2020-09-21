@@ -3,12 +3,26 @@
     <div class="decorImage__title">{{blockName}}</div>
     <div class="decorImage__wrapper">
       <div class="decorBlock__image" v-for="item in items" :key="item.ID">
-        <input class="decorImage__radio" type="radio"
-               :name="'name_' + item.PROPERTY_TYPE_ENUM_ID + '_' + item.IBLOCK_SECTION_ID"
-               :id="item.ID"
-               :disabled="checkActive(item.PROPERTY_TYPE_LINK_VALUE, item)"
-               :checked="isChecked(item.ID)"
-               @change="checkInput(item.IBLOCK_SECTION_ID, $event)"
+        <!--        если это раздел раковины, то чекбоксы-->
+        <input
+          v-if="item.IBLOCK_SECTION_ID == 1046"
+          class="decorImage__radio"
+          type="checkbox"
+          :name="'name_' + item.PROPERTY_TYPE_ENUM_ID + '_' + item.IBLOCK_SECTION_ID"
+          :id="item.ID"
+          :disabled="checkActive(item.PROPERTY_TYPE_LINK_VALUE, item)"
+          :checked="isChecked(item.ID)"
+          @change="checkInput(item.IBLOCK_SECTION_ID, $event)"
+        >
+        <input
+          v-else
+          class="decorImage__radio"
+          type="radio"
+          :name="'name_' + item.PROPERTY_TYPE_ENUM_ID + '_' + item.IBLOCK_SECTION_ID"
+          :id="item.ID"
+          :disabled="checkActive(item.PROPERTY_TYPE_LINK_VALUE, item)"
+          :checked="isChecked(item.ID)"
+          @change="checkInput(item.IBLOCK_SECTION_ID, $event)"
         >
         <label class="decorImage__label" :for="item.ID">
           <div class="decorImage__color" v-if="item.COLOR"
@@ -50,9 +64,11 @@
         if (this.checkedInputs) {
 
           if (element.IBLOCK_SECTION_ID != 1042 && element.IBLOCK_SECTION_ID != 1044) {
-            if (typeLink != null)
+            if (typeLink != null) {
               return !this.checkedInputs.some(item => item.id == typeLink);
-            else return  false;
+            } else {
+              return false;
+            }
           } else if (element.IBLOCK_SECTION_ID == 1044) {
             if (this.checkedInputs.some(item => item.type === 'type')) {
               return !this.checkedInputs.some(item => item.type === 'type' && item.id == typeLink);
@@ -82,13 +98,23 @@
             return this.checkedInputs.some(input => input.type == 'type' && input.id ==
             item.PROPERTY_TYPE_LINK_VALUE);
           });
+          if (this.items[0].IBLOCK_SECTION_ID != 1046) {
+            if (filteredItems.length == 1) {
+              return filteredItems[0].ID == id ? true : false;
+            }
+            return this.checkedInputs.some((checkedInput) => {
+              return checkedInput.id === id;
+            });
+          } else {
 
-          if (filteredItems.length == 1) {
-            return filteredItems[0].ID == id ? true : false;
+            if (filteredItems.length == 2) {
+              const filteredCheckbox = filteredItems.filter(filteredItem => {
+                return filteredItem.ID == id;
+              });
+              return filteredCheckbox.length == 1;
+              console.log(filteredCheckbox);
+            }
           }
-          return this.checkedInputs.some((checkedInput) => {
-            return checkedInput.id === id;
-          });
         }
         return false;
       },
